@@ -44,7 +44,7 @@ private void save(versionName, versionCode) {
 task bumperInit() {
     group = 'bumper'
     doLast {
-        def versionName = project.hasProperty('bumperVersionName') ? bumperVersionName : '1.0.0'
+        def versionName = project.hasProperty('bumperVersionName') ? bumperVersionName : '0.0.0'
         def versionCode = project.hasProperty('bumperVersionCode') ? bumperVersionCode : '1'
         save(versionName, versionCode)
     }
@@ -67,6 +67,6 @@ task bumperVersionMinor () {
 task bumperVersionMajor () {
     group = 'bumper'
     doLast {
-        save(getVersionNameMajor() + 1, 0, 0, getAppVersionCode() + 1)
+        save(getVersionNameMajor() + 0, 0, 0, getAppVersionCode() + 1)
     }
 }
