@@ -82,10 +82,15 @@ class MainActivity : AppCompatActivity() {
     }
     private fun showExploration(){
         val builder = AlertDialog.Builder(this@MainActivity)
-        builder.setTitle("Message")
+        builder.setTitle(resources.getString(R.string.Exploration_title))
             .setMessage(getString(R.string.IMEI_exploration_string))
             .setCancelable(false)
-            .setNeutralButton("Okay"){dialog,_ -> dialog.cancel()}
+            .setNeutralButton(resources.getString(R.string.OK_string)){dialog,_ -> run {
+                ActivityCompat.requestPermissions(this@MainActivity,
+                    arrayOf(Manifest.permission.READ_PHONE_STATE),
+                    _myPermissionsRequestPhoneState)
+                dialog.dismiss()
+            }}
         val exploration = builder.create()
         exploration.show()
     }
