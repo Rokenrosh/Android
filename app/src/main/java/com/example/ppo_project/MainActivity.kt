@@ -2,16 +2,16 @@ package com.example.ppo_project
 
 import android.Manifest
 import android.content.Context
-import android.support.v7.app.AppCompatActivity
+import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.app.PendingIntent.getActivity
 import android.content.pm.ActivityInfo
 import android.content.pm.PackageManager
-import android.support.v4.app.ActivityCompat
-import android.support.v4.content.ContextCompat
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import android.telephony.TelephonyManager
 import android.widget.TextView
-import android.support.v7.app.AlertDialog
+import androidx.appcompat.app.AlertDialog
 
 
 class MainActivity : AppCompatActivity() {
@@ -75,7 +75,7 @@ class MainActivity : AppCompatActivity() {
                 Manifest.permission.READ_PHONE_STATE)
             != PackageManager.PERMISSION_GRANTED
         ) {
-            textViewIMEI.text = getString(R.string.not_access_text)
+            textViewIMEI.text = resources.getString(R.string.not_access_text)
         } else {
             textViewIMEI.text = telephonyManager.deviceId
         }
@@ -83,7 +83,7 @@ class MainActivity : AppCompatActivity() {
     private fun showExploration(){
         val builder = AlertDialog.Builder(this@MainActivity)
         builder.setTitle(resources.getString(R.string.Exploration_title))
-            .setMessage(getString(R.string.IMEI_exploration_string))
+            .setMessage(resources.getString(R.string.IMEI_exploration_string))
             .setCancelable(false)
             .setNeutralButton(resources.getString(R.string.OK_string)){dialog,_ -> run {
                 ActivityCompat.requestPermissions(this@MainActivity,
