@@ -3,6 +3,7 @@
           package="com.example.ppo_project">
 
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <application
             android:allowBackup="true"
             android:icon="@mipmap/ic_launcher"
@@ -15,6 +16,7 @@
         <meta-data android:name="QUERY_LOG" android:value="true"/>
         <meta-data android:name="DOMAIN_PACKAGE_NAME" android:value="com.example"/>
         <activity android:name=".MainActivity">
+            <nav-graph android:value="@navigation/main_graph" />
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
