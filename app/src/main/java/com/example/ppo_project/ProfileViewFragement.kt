@@ -1,5 +1,6 @@
 package com.example.ppo_project
 
+import android.content.Intent
 import android.content.Context
 import android.os.Bundle
 import android.util.Log
@@ -38,19 +39,28 @@ class ProfileViewFragment : Fragment() {
         textPhone = v.findViewById(R.id.textViewPhoneNumber)
         textEmail = v.findViewById(R.id.textViewEmail)
         profileImageView = v.findViewById(R.id.profileImageView)
+        val logOutButton = v.findViewById<AppCompatButton>(R.id.log_out_button)
+        logOutButton.setOnClickListener { logOutClick() }
         updateUI()
         return v
     }
+
+    private fun logOutClick(){
+        UserUtil.instance.logOut()
+        startActivity(Intent(activity, AuthActivity::class.java))
+        activity?.finish()
+    }
+
     private fun updateUI(){
-        val user = UserUtil.instance.loadUser(context)
-        textName?.text = user.name
-        textSurname?.text = user.surname
-        textPhone?.text = user.phone
-        textEmail?.text = user.email
+        val user = UserUtil.instance.currentUser
+        textName?.text = user?.name
+        textSurname?.text = user?.surname
+        textPhone?.text = user?.phone
+        textEmail?.text = user?.email
         updatePhotoView()
     }
     private fun updatePhotoView(){
-        val photoFile = UserUtil.instance.getPhotoFile(context)
+        val photoFile = UserUtil.instance.currentPhotoFile
         if(photoFile == null || !photoFile.exists()) {
             profileImageView?.setImageDrawable(null)
             return

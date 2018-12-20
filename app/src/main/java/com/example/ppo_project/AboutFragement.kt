@@ -1,4 +1,5 @@
 package com.example.ppo_project
+
 import android.Manifest
 import android.annotation.SuppressLint
 import android.app.Activity
@@ -7,19 +8,33 @@ import android.content.pm.PackageManager
 import android.os.Bundle
 import android.provider.Settings
 import android.telephony.TelephonyManager
+import android.util.Log
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.widget.AppCompatTextView
 import androidx.core.app.ActivityCompat
 import androidx.fragment.app.Fragment
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
+import androidx.navigation.Navigation
 
 class AboutFragment : Fragment() {
 
-    private val _myPermissionsRequestPhoneState = 1
+    companion object {
+        const val REQUEST_PHONE_STATE = 2
+    }
     private var textIMEI: AppCompatTextView? = null
     private var textVersion: AppCompatTextView? = null
+    private var navController: NavController? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -27,14 +42,19 @@ class AboutFragment : Fragment() {
         textIMEI = v.findViewById(R.id.textView_IMEI) as AppCompatTextView
         textVersion = v.findViewById(R.id.textView_version) as AppCompatTextView
         textVersion?.text = BuildConfig.VERSION_NAME
+        navController = findNavController()
         showIMEI()
+        (activity as AppCompatActivity).supportActionBar?.apply {
+            setDisplayHomeAsUpEnabled(true)
+            setHomeButtonEnabled(true)
+        }
         return v
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<String>,
                                             grantResults: IntArray) {
         when (requestCode) {
-            _myPermissionsRequestPhoneState -> {
+            REQUEST_PHONE_STATE -> {
                 // If request is cancelled, the result arrays are empty.
                 if ((grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED)) {
                     textIMEI?.text = getIMEI()
@@ -42,9 +62,6 @@ class AboutFragment : Fragment() {
                     textIMEI?.text = getString(R.string.not_access_text)
                 }
                 return
-            }
-            else -> {
-                // Ignore all other requests.
             }
         }
     }
@@ -74,7 +91,7 @@ class AboutFragment : Fragment() {
                     Manifest.permission.READ_PHONE_STATE)) {
                 showExploration()
             } else {
-                requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), _myPermissionsRequestPhoneState)
+                requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), REQUEST_PHONE_STATE)
             }
         } else {
             textIMEI?.text = getIMEI()
@@ -87,10 +104,24 @@ class AboutFragment : Fragment() {
             .setMessage(resources.getString(R.string.IMEI_exploration_string))
             .setCancelable(false)
             .setNeutralButton(resources.getString(R.string.OK_string)){ dialog, _ -> run {
-                requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), _myPermissionsRequestPhoneState)
+                requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), REQUEST_PHONE_STATE)
                 dialog.dismiss()
             }}
         val exploration = builder.create()
         exploration.show()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            android.R.id.home -> {
+                (activity as AppCompatActivity).supportActionBar?.apply {
+                    setDisplayHomeAsUpEnabled(false)
+                    setHomeButtonEnabled(false)
+                }
+                navController?.popBackStack()
+                return true
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 }

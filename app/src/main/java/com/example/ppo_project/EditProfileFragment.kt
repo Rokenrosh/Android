@@ -12,8 +12,7 @@ import java.io.File
 
 class ProfileEditFragment : ProfileFragment() {
 
-    override val layoutId: Int
-        get() = R.layout.fragement_edit_profile
+    override val layoutId: Int = R.layout.fragement_edit_profile
 
     private var photoFile: File? = null
 
@@ -21,30 +20,31 @@ class ProfileEditFragment : ProfileFragment() {
         val v = super.onCreateView(inflater, container, savedInstanceState)
         val saveProfileButton = v?.findViewById<AppCompatButton>(R.id.saveProfileButton)
         saveProfileButton?.setOnClickListener{saveProfileClick()}
-        photoFile = UserUtil.instance.getPhotoFile(context)
+        photoFile = UserUtil.instance.currentPhotoFile
         updateUI()
         return v
     }
 
     private fun updateUI(){
-        val user = UserUtil.instance.loadUser(context)
-        nameTextEdit?.setText(user.name)
-        surnameTextEdit?.setText(user.surname)
-        phoneTextEdit?.setText(user.phone)
-        emailTextEdit?.setText(user.email)
+        val user = UserUtil.instance.currentUser
+        nameTextEdit?.setText(user?.name)
+        surnameTextEdit?.setText(user?.surname)
+        phoneTextEdit?.setText(user?.phone)
+        emailTextEdit?.setText(user?.email)
         updatePhotoView()
     }
 
     private fun saveProfileClick(){
         if(isInputCorrect()) {
-            val user = UserUtil.instance.loadUser(context)
-            user.name = nameTextEdit?.text.toString()
-            user.surname = surnameTextEdit?.text.toString()
-            user.email = emailTextEdit?.text.toString()
-            user.phone = phoneTextEdit?.text.toString()
-            user.save()
-            if (photoFile?.path != UserUtil.instance.getPhotoFile(context)?.path)
-                PictureUtil.saveUserPicture(context, UserUtil.instance.getPhotoFile(context))
+            UserUtil.instance.currentUser?.apply {
+                name = nameTextEdit?.text.toString()
+                surname = surnameTextEdit?.text.toString()
+                email = emailTextEdit?.text.toString()
+                phone = phoneTextEdit?.text.toString()
+                save()
+            }
+            if (photoFile?.path != UserUtil.instance.currentPhotoFile?.path)
+                PictureUtil.saveUserPicture(context, UserUtil.instance.currentPhotoFile)
             findNavController().navigate(R.id.profileViewFragment)
         }
     }
