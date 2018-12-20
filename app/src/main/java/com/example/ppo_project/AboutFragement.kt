@@ -86,7 +86,7 @@ class AboutFragment : Fragment() {
         builder.setTitle(resources.getString(R.string.Exploration_title))
             .setMessage(resources.getString(R.string.IMEI_exploration_string))
             .setCancelable(false)
-            .setNeutralButton(resources.getString(R.string.OK_string)){dialog,_ -> run {
+            .setNeutralButton(resources.getString(R.string.OK_string)){ dialog, _ -> run {
                 requestPermissions(arrayOf(Manifest.permission.READ_PHONE_STATE), _myPermissionsRequestPhoneState)
                 dialog.dismiss()
             }}
