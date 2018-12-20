@@ -16,6 +16,24 @@ android {
         versionName appVersionName
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
     }
+
+    flavorDimensions "version"
+    productFlavors {
+        master {
+            dimension "version"
+        }
+        develop {
+            dimension "version"
+            versionName defaultConfig.versionName + "-dev"
+        }
+    }
+
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            outputFileName = "${variant.name}-${variant.versionName}.apk"
+        }
+    }
+
     signingConfigs {
         debug {  }
         release {
