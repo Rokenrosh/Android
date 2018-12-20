@@ -7,6 +7,9 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.setupWithNavController
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.orm.SugarDb
+
+
 
 class MainActivity : AppCompatActivity() {
 
@@ -19,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation = findViewById(R.id.bottom_navigation)
         navController  = Navigation.findNavController(this@MainActivity, R.id.nav_host_fragment)
         bottomNavigation?.setupWithNavController(navController as NavController)
+
     }
 
 }
