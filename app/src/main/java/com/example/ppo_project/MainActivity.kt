@@ -2,6 +2,8 @@ package com.example.ppo_project
 
 import android.os.Bundle
 import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
@@ -24,5 +26,19 @@ class MainActivity : AppCompatActivity() {
         bottomNavigation?.setupWithNavController(navController as NavController)
 
     }
+
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        super.onCreateOptionsMenu(menu)
+        menuInflater.inflate(R.menu.appbar_menu, menu)
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem?): Boolean {
+        when(item?.itemId){
+            R.id.appbar_item_about -> navController?.navigate(R.id.aboutFragment)
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
 
 }
